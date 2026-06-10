@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rom til rom</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <span class="logo">🎉 ROM TIL ROM</span>
+  <div class="sep"></div>
+  <button class="btn primary" onclick="openLoadModal()">Last inn deltakere</button>
+  <button class="btn" onclick="openJsonModal()">Åpne JSON</button>
+  <button class="btn" onclick="openAddModal()" id="btn-add" style="display:none">Legg til deltaker</button>
+  <button class="btn" onclick="apiCall('/api/generate', {})" id="btn-gen" style="display:none">Regenerer</button>
+  <button class="btn" onclick="saveJSON()" id="btn-save" style="display:none">Lagre JSON</button>
+  <div class="sep"></div>
+  <div class="status-dot" id="status-dot"></div>
+  <span class="status-label" id="status-label">Ingen timeplan</span>
+  <div class="spacer"></div>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="showTab('structured')" id="tab-structured">Strukturert</button>
+  <button class="tab-btn" onclick="showTab('routes')" id="tab-routes">Timeplan</button>
+</div>
+
+<div class="main" id="main-content">
+  <div class="empty" id="empty-state">
+    <div class="empty-icon">🏠</div>
+    <h2>Ingen timeplan lastet</h2>
+    <p>Last inn en liste med deltakere (Navn, Rom) for å generere en ny timeplan,
+       eller åpne en lagret JSON-fil.</p>
+    <div style="display:flex;gap:10px;margin-top:8px">
+      <button class="btn primary" onclick="openLoadModal()">Last inn deltakere</button>
+      <button class="btn" onclick="openJsonModal()">Åpne JSON</button>
+    </div>
+  </div>
+  <div id="structured-view" style="display:none"></div>
+  <div id="routes-view" style="display:none"></div>
+</div>
+
+<!-- Last inn deltakere -->
+<div class="modal-overlay" id="load-modal">
+  <div class="modal">
+    <h2>Last inn deltakere</h2>
+    <div class="file-pick-area">
+      <input type="file" id="load-file-input" accept=".txt" style="display:none"
+        onchange="readFileIntoTextarea('load-file-input','load-textarea','load-file-name')">
+      <button class="btn" onclick="document.getElementById('load-file-input').click()">Velg .txt-fil</button>
+<span class="file-name" id="load-file-name">Ingen fil valgt</span>
+    </div>
+    <textarea id="load-textarea"
+      placeholder="Navn, Romnummer&#10;Kari Nordmann, 101&#10;Ole Hansen, 106&#10;..."></textarea>
+    <p class="modal-hint">Én deltaker per linje: Navn, Romnummer</p>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('load-modal')">Avbryt</button>
+      <button class="btn primary" onclick="loadParticipants()">Generer timeplan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Åpne JSON -->
+<div class="modal-overlay" id="json-modal">
+  <div class="modal">
+    <h2>Åpne lagret timeplan (JSON)</h2>
+    <div class="file-pick-area">
+      <input type="file" id="json-file-input" accept=".json" style="display:none"
+        onchange="readFileIntoTextarea('json-file-input','json-textarea','json-file-name')">
+      <button class="btn" onclick="document.getElementById('json-file-input').click()">Velg .json-fil</button>
+      <span class="file-name" id="json-file-name">Ingen fil valgt</span>
+    </div>
+    <textarea id="json-textarea"
+      placeholder='[{"name": "Kari", "room": "101", ...}]'></textarea>
+    <p class="modal-hint">Lim inn innholdet manuelt, eller velg en lagret .json-fil</p>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('json-modal')">Avbryt</button>
+      <button class="btn primary" onclick="loadJson()">Last inn</button>
+    </div>
+  </div>
+</div>
+
+<!-- Legg til deltaker -->
+<div class="modal-overlay" id="add-modal">
+  <div class="modal" style="min-width:300px">
+    <h2>Legg til deltaker</h2>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px">
+      <input id="add-name" class="modal-input" type="text" placeholder="Navn"
+        onkeydown="if(event.key==='Enter') addParticipant()">
+      <input id="add-room" class="modal-input" type="text" placeholder="Romnummer"
+        onkeydown="if(event.key==='Enter') addParticipant()">
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('add-modal')">Avbryt</button>
+      <button class="btn primary" onclick="addParticipant()">Legg til</button>
+    </div>
+  </div>
+</div>
+
+<!-- Rediger deltaker -->
+<div class="modal-overlay" id="edit-modal">
+  <div class="modal" style="min-width:300px">
+    <h2>Rediger deltaker</h2>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px">
+      <input id="edit-name" class="modal-input" type="text" placeholder="Navn"
+        onkeydown="if(event.key==='Enter') editParticipant()">
+      <input id="edit-room" class="modal-input" type="text" placeholder="Romnummer"
+        onkeydown="if(event.key==='Enter') editParticipant()">
+      <input id="edit-old-name" type="hidden">
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeModal('edit-modal')">Avbryt</button>
+      <button class="btn primary" onclick="editParticipant()">Lagre</button>
+    </div>
+  </div>
+</div>
+
+<div id="drag-ghost"></div>
+<div class="toast" id="toast"></div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

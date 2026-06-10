@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+timeplan_autosave.json
+deltakere.txt
+.claude/
