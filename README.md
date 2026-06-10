@@ -2,6 +2,17 @@
 
 Generator for å planlegge rom-til-rom. Kjører lokalt.
 
+For utenforstående:
+Rom-Til-Rom er en tradisjonsrik fest vi arrangerer 1-2 ganger i semesteret på Singsaker Studenterhjem. Festen skjer på følgende vis:
+Alle deltekre stiller rommet sitt til disposisjon i 30 minutter ila. kvelden. De skal stille med:
+- Et unikt tema
+- En unik drink
+- En lek
+- God stemning
+Hver deltaker vil, på starten av festen, få utdelt 6 rom de skal være på (deriblant sitt eget), med 6 ulike grupper.
+
+Denne koden er for å generere et utkast til romrekkefølge, og løype for hver deltaker. Programmet tillater også å endre på eksisterende løyper, og endre visningsformat for lett å skrive ut alle enkeltløypene.
+
 ## Kom i gang
 
 ```bash
