@@ -37,6 +37,14 @@ Tollak, 254
 | Dra rom-badge → annet rom | Bytter tidspunkt (gjester følger med) |
 | Dra rom-badge → tom bakgrunn i annen økt | Flyttes (uten gjester) |
 
+## Delte rom
+Programmet reagerer dårlig på to personer med samme rom. Dette problemet omgås med å dele opp rommet i 2. F. eks hvis Olav og Kari ønsker å arrangere sammen på rom 112, men ha unike løyper, kan dette løses følgelig i Deltakere.txt 
+
+Olav 112-1
+Kari 112-2
+
+Arrangør må selv sørge for at de får timeslot samtidig. 
+
 ## Filstruktur
 
 ```
